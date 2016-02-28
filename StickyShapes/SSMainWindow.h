@@ -3,6 +3,7 @@
 
 #include <QtWidgets/QMainWindow>
 #include "ui_SSMainWindow.h"
+#include "Scene.h"
 
 class SSMainWindow : public QMainWindow
 {
@@ -12,10 +13,12 @@ public:
 	SSMainWindow(QWidget *parent = 0);
 	~SSMainWindow();
 
+	bool setScene(Scene *scn);
+
 private:
 	Ui::SSMainWindowClass ui;
 
-	QGraphicsScene scene; //remove this to separate class
+	Scene *scene;
 };
 
 #endif // SSMAINWINDOW_H

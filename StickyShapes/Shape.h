@@ -2,7 +2,9 @@
 #define SHAPE_H
 
 #include <QGraphicsItem>
+#include <QPoint>
 
+//this class implements the simplest shapes
 class Shape : public QGraphicsItem
 {
 	//Q_OBJECT
@@ -13,15 +15,16 @@ public:
 	~Shape();
 
 	QRectF boundingRect() const;
-	QPainterPath shape() const; //Prolly requires interface classes for different forms, duuh.
+	QPainterPath shape() const; //It's awesomeSqare only for now
 	void paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *);
 
 protected:
 	void advance(int step);
 
 private:
-	qreal velocity;
-	qreal angle;
+	qreal rotation;
+	QColor color;
+	QPoint pos; 
 
 	const QRectF awesomeSquare = QRectF(0, 0, 50, 50); //for the first launch and for lulz
 };

@@ -3,9 +3,12 @@
 #include <QPainter>
 
 Shape::Shape()
-	: velocity(0), angle(0)
+	: rotation(qrand() % 180), color(qrand() % 256, qrand() % 256, qrand() % 256)
 {
-	
+	pos = QPoint(qrand() % 300, qrand() % 300);
+	setRotation(rotation);
+	setPos(pos);
+
 }
 
 Shape::~Shape()
@@ -27,7 +30,7 @@ QPainterPath Shape::shape() const
 
 void Shape::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *)
 {
-	painter->setBrush(Qt::blue);
+	painter->setBrush(color);
 	painter->drawRect(awesomeSquare);
 }
 
