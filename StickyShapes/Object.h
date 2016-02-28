@@ -1,12 +1,14 @@
 #ifndef OBJECT_H
 #define OBJECT_H
 
+#include "Shape.h"
+
 #include <QGraphicsItem>
 #include <QList>
-#include <Shape.h>
 
-//should it inherit QGraphicsItem?
-class Object
+class Shape;
+
+class Object : public QGraphicsItemGroup
 {
 public:
 	Object();
@@ -15,15 +17,15 @@ public:
 	~Object();
 
 	void uniteWith(Object *who);
-	void AddShape(Shape* shape);
+	void addShape(Shape* shape); //there is QGraphicItemGroup::addToGroup()
 
-	const QList<Shape *> &getShapes() const;
+	inline void setVelocity(qreal x, qreal y) { vx = x; vy = y; };
+	inline qreal getVelocityX() { return vx; };
+	inline qreal getVelocityY() { return vy; };
 
+	void advance();
 private:
-	qreal velocity;
-	qreal angle;
-
-	QList<Shape *> shapes;
+	qreal vx, vy; //velocity
 };
 
 #endif // OBJECT_H

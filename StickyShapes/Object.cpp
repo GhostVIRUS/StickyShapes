@@ -2,30 +2,31 @@
 
 
 Object::Object()
-	: velocity(0), angle(0)
+	: vx(0), vy(0)
 {
 
 }
 
 Object::Object(Object *obj)
-	: velocity(obj->velocity), angle(obj->angle), shapes(obj->shapes)
+	: vx(obj->vx), vy(obj->vy)
 {
-	
+	addToGroup(obj); //probably it is better to use the following implementation
+	/*for each (auto pShape in childItems())
+	{
+		addToGroup(pShape);
+	}*/
 }
 
 Object::Object(Shape *shape)
+	: vx(0), vy(0)
 {
-	Object();
-	shapes.push_back(shape);
+	addToGroup(shape);
 }
 
 
 Object::~Object()
 {
-	for each (Shape* pShape in shapes)
-	{
-		delete pShape;
-	}
+	
 }
 
 void Object::uniteWith(Object *who)
@@ -33,12 +34,13 @@ void Object::uniteWith(Object *who)
 
 }
 
-void Object::AddShape(Shape* shape)
+void Object::addShape(Shape* shape)
 {
-	shapes.push_back(shape);
+	addToGroup(shape);
 }
 
-const QList<Shape *> &Object::getShapes() const
+
+void Object::advance()
 {
-	return shapes;
+	this->moveBy(vx, vy);
 }

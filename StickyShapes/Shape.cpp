@@ -2,13 +2,11 @@
 
 #include <QPainter>
 
-Shape::Shape()
-	: rotation(qrand() % 180), color(qrand() % 256, qrand() % 256, qrand() % 256)
+Shape::Shape(QGraphicsItem *parent /*= 0*/)
+	: QGraphicsItem(parent), color(qrand() % 256, qrand() % 256, qrand() % 256)
 {
-	pos = QPoint(qrand() % 300, qrand() % 300);
-	setRotation(rotation);
-	setPos(pos);
-
+	setRotation(0);
+	setPos(QPointF(qrand() % 300, qrand() % 300));
 }
 
 Shape::~Shape()
@@ -23,9 +21,10 @@ QRectF Shape::boundingRect() const
 
 QPainterPath Shape::shape() const
 {
-	QPainterPath awesomePath;
+	/*QPainterPath awesomePath;
 	awesomePath.addRect(awesomeSquare);
-	return awesomePath;
+	return awesomePath;*/
+	return QGraphicsItem::shape();
 }
 
 void Shape::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *)
@@ -34,7 +33,3 @@ void Shape::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *
 	painter->drawRect(awesomeSquare);
 }
 
-void Shape::advance(int step)
-{
-
-}

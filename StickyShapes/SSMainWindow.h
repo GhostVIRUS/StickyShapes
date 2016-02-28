@@ -13,12 +13,14 @@ public:
 	SSMainWindow(QWidget *parent = 0);
 	~SSMainWindow();
 
-	bool setScene(Scene *scn);
+private slots:
+	void slotClearScene(); //this slot is now used for all kind of tests, but clearing scene
+	void slotAddShape();
 
 private:
 	Ui::SSMainWindowClass ui;
 
-	Scene *scene;
+	Scene *scene; //Do I really need a pointer on my Scene in this class?
 };
 
 #endif // SSMAINWINDOW_H

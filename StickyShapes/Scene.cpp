@@ -1,44 +1,50 @@
 #include "Scene.h"
 
-Scene::Scene(QObject *parent)
-	: QGraphicsScene(parent)
+Scene::Scene(QWidget *parent)
+	: QWidget(parent), scene(new QGraphicsScene), view(0)
 {
-	setSceneRect(0, 0, 300, 300);
-	setItemIndexMethod(QGraphicsScene::NoIndex);
+	scene->setSceneRect(0, 0, 300, 300);
+	scene->setItemIndexMethod(QGraphicsScene::NoIndex);
 }
 
 Scene::~Scene()
 {
-	for each (Object *pObject in objects)
-	{
-		delete pObject;
-	}
+	
 }
 
-Object* Scene::AddObject(Object* obj)
+Object* Scene::addObject(Object* obj)
 {
-	objects.push_back(obj);
-	for each (auto pShape in obj->getShapes())
-	{
-		addItem(pShape);
-	}
+	scene->addItem(obj);
+	
 	return obj;
 }
 
-Object* Scene::AddObject(Shape* shape)
+Object* Scene::addObject(Shape* shape)
 {
 	Object *obj = new Object(shape);
-	return AddObject(obj);
+	return addObject(obj);
 }
 
-bool Scene::DeleteObject(Object* obj)
+bool Scene::deleteObject(Object* obj)
 {
-	int shift = objects.indexOf(obj);
-	if (!shift)
+	if (!obj)
 		return false;
+	scene->removeItem(obj);
 
-	objects.erase(objects.begin() + shift);
-	delete obj;
+	return true;
+}
 
+void Scene::timeStep()
+{
+	//TODO: check for collisions and stuff
+	scene->advance();
+}
+
+bool Scene::setView(QGraphicsView *v)
+{
+	if (!v)
+		return false;
+	view = v;
+	view->setScene(scene);
 	return true;
 }

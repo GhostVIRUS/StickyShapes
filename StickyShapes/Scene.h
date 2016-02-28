@@ -4,24 +4,34 @@
 #include "Object.h"
 #include "Shape.h"
 
+#include <QWidget>
 #include <QGraphicsScene>
+#include <QGraphicsView>
 #include <QList>
 
-class Scene : public QGraphicsScene
+class Scene : public QWidget
 {
 	Q_OBJECT
 
 public:
-	Scene(QObject *parent);
+	Scene(QWidget *parent);
 	~Scene();
 
-	Object* AddObject(Object* obj);
-	Object* AddObject(Shape* obj);
+	Object* addObject(Object* obj);
+	Object* addObject(Shape* shape);
+	bool deleteObject(Object* obj);
 
-	bool DeleteObject(Object* obj);
+	bool setView(QGraphicsView *v);
+
+public slots: //so public tho?
+	void timeStep();
 
 private:
-	QList<Object *> objects;
+	QGraphicsScene *scene;
+	QGraphicsView *view;
+
+	//QList<Object *> objects;
+
 };
 
 #endif // SCENE_H

@@ -3,20 +3,16 @@
 #include "Object.h"
 #include "Shape.h"
 
-//#include <QtWidgets/QApplication>
-#include <QtGui>
+#include <QtWidgets/QApplication>
+#include <QTimer>
 
 int main(int argc, char *argv[])
 {
 	QApplication a(argc, argv);
-
-	Scene theBestScene(&a);
-	for (int i = 0; i < 3; ++i)
-	{
-		theBestScene.AddObject(new Shape);
-	}
 	SSMainWindow w;
-	w.setScene(&theBestScene);
+	//QTimer timer;
+	//QObject::connect(&timer, SIGNAL(timeout()), &theBestScene, SLOT(advance()));
+	//timer.start(500);
 	w.show();
 	return a.exec();
 }
