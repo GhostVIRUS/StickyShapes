@@ -2,11 +2,9 @@
 #include "Shape.h"
 
 SSMainWindow::SSMainWindow(QWidget *parent)
-	: QMainWindow(parent), scene(new Scene(this))
+	: QMainWindow(parent)
 {
 	ui.setupUi(this);
-
-	scene->setView(ui.graphicsView);
 }
 
 SSMainWindow::~SSMainWindow()
@@ -16,10 +14,11 @@ SSMainWindow::~SSMainWindow()
 
 void SSMainWindow::slotClearScene()
 {
-	
+	ui.scene->clearScene();
+	//ui.scene->timeStep();
 }
 
 void SSMainWindow::slotAddShape()
 {
-	scene->addObject(new Shape());
+	ui.scene->addObject();
 }

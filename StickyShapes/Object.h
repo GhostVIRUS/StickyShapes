@@ -4,26 +4,27 @@
 #include "Shape.h"
 
 #include <QGraphicsItem>
-#include <QList>
+#include <QPainter>
 
 class Shape;
 
 class Object : public QGraphicsItemGroup
 {
 public:
-	Object();
-	Object(Object *obj);
 	Object(Shape *shape);
 	~Object();
 
-	void uniteWith(Object *who);
-	void addShape(Shape* shape); //there is QGraphicItemGroup::addToGroup()
+	//void uniteWith(Object *obj);
 
 	inline void setVelocity(qreal x, qreal y) { vx = x; vy = y; };
 	inline qreal getVelocityX() { return vx; };
 	inline qreal getVelocityY() { return vy; };
 
-	void advance();
+	QPainterPath shape() const;
+	QList<QGraphicsItem *> collidingItems(Qt::ItemSelectionMode mode = Qt::IntersectsItemShape);
+
+	void advance(int phase);
+	void paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *);
 private:
 	qreal vx, vy; //velocity
 };

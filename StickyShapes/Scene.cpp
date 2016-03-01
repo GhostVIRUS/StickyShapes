@@ -1,50 +1,64 @@
 #include "Scene.h"
 
 Scene::Scene(QWidget *parent)
-	: QWidget(parent), scene(new QGraphicsScene), view(0)
+	: QWidget(parent), field(new QGraphicsScene(0, 0, 300, 300)), view(new QGraphicsView(field, this)),
+	layout(new QHBoxLayout(this))
 {
-	scene->setSceneRect(0, 0, 300, 300);
-	scene->setItemIndexMethod(QGraphicsScene::NoIndex);
+	layout->setSpacing(0);
+	layout->setContentsMargins(0, 0, 0, 0);
+	layout->addWidget(view);
+
+	field->setItemIndexMethod(QGraphicsScene::NoIndex);
+
+	view->setScene(field);
+	view->setViewportUpdateMode(QGraphicsView::BoundingRectViewportUpdate);
+	view->setAlignment(Qt::AlignTop | Qt::AlignLeft);
+
+	timer = new QTimer;
+	QObject::connect(timer, SIGNAL(timeout()), field, SLOT(advance()));
+	timer->start(10);
+
 }
 
 Scene::~Scene()
 {
-	
+	delete view;
+	delete field;
 }
 
-Object* Scene::addObject(Object* obj)
+void Scene::addObject()
 {
-	scene->addItem(obj);
-	
-	return obj;
+	Object *obj = new Object(new Shape(QPointF(qrand() % (width() - 54), qrand() % (height() - 54))));
+	addObject(obj);
 }
 
-Object* Scene::addObject(Shape* shape)
+void Scene::addObject(Object* obj)
 {
-	Object *obj = new Object(shape);
-	return addObject(obj);
+	field->addItem(obj);
 }
 
 bool Scene::deleteObject(Object* obj)
 {
 	if (!obj)
 		return false;
-	scene->removeItem(obj);
+	field->removeItem(obj);
 
 	return true;
 }
 
 void Scene::timeStep()
 {
-	//TODO: check for collisions and stuff
-	scene->advance();
+	
 }
 
-bool Scene::setView(QGraphicsView *v)
+void Scene::resizeEvent(QResizeEvent *event)
 {
-	if (!v)
-		return false;
-	view = v;
-	view->setScene(scene);
-	return true;
+	QWidget::resizeEvent(event);
+	field->setSceneRect(0, 0, width() - 3, height() - 3);
+	view->resize(width(), height());
+}
+
+void Scene::clearScene()
+{
+	field->clear();
 }

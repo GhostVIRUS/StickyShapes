@@ -7,6 +7,8 @@
 #include <QWidget>
 #include <QGraphicsScene>
 #include <QGraphicsView>
+#include <QHBoxLayout>
+#include <QTimer>
 #include <QList>
 
 class Scene : public QWidget
@@ -17,21 +19,27 @@ public:
 	Scene(QWidget *parent);
 	~Scene();
 
-	Object* addObject(Object* obj);
-	Object* addObject(Shape* shape);
+	void addObject();
+	void addObject(Object* obj);
 	bool deleteObject(Object* obj);
+	void clearScene();
 
-	bool setView(QGraphicsView *v);
+	//inline QList<Object *> &getObjects() { return objects; };
+
+private:
+	void resizeEvent(QResizeEvent *event);
+
 
 public slots: //so public tho?
 	void timeStep();
 
 private:
-	QGraphicsScene *scene;
+	QGraphicsScene *field;
 	QGraphicsView *view;
 
-	//QList<Object *> objects;
+	QHBoxLayout *layout;
 
+	QTimer *timer;
 };
 
 #endif // SCENE_H

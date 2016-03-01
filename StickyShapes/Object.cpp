@@ -1,24 +1,9 @@
 #include "Object.h"
 
-
-Object::Object()
-	: vx(0), vy(0)
-{
-
-}
-
-Object::Object(Object *obj)
-	: vx(obj->vx), vy(obj->vy)
-{
-	addToGroup(obj); //probably it is better to use the following implementation
-	/*for each (auto pShape in childItems())
-	{
-		addToGroup(pShape);
-	}*/
-}
+#include <QGraphicsScene>
 
 Object::Object(Shape *shape)
-	: vx(0), vy(0)
+	: vx(qrand() % 3 - 1), vy(qrand() % 3 - 1)
 {
 	addToGroup(shape);
 }
@@ -26,21 +11,96 @@ Object::Object(Shape *shape)
 
 Object::~Object()
 {
-	
-}
-
-void Object::uniteWith(Object *who)
-{
-
-}
-
-void Object::addShape(Shape* shape)
-{
-	addToGroup(shape);
+	//Qt has to delete children automatically
 }
 
 
-void Object::advance()
+void Object::advance(int phase)
 {
-	this->moveBy(vx, vy);
+	if (phase == 0)
+	{
+		moveBy(vx, vy);
+
+		int top = mapRectToScene(boundingRect()).top();
+		int bottom = mapRectToScene(boundingRect()).bottom();
+		int left = mapRectToScene(boundingRect()).left();
+		int right = mapRectToScene(boundingRect()).right();
+
+		if (left <= 0)
+		{
+			moveBy(-left, 0);
+			setVelocity(qAbs(getVelocityX()), getVelocityY());
+		}
+		else if (right >= scene()->width())
+		{
+			moveBy(scene()->width() - right, 0);
+			setVelocity(-qAbs(getVelocityX()), getVelocityY());
+		}
+		if (top <= 0)
+		{
+			moveBy(0, -top);
+			setVelocity(getVelocityX(), qAbs(getVelocityY()));
+		}
+		else if (bottom >= scene()->height())
+		{
+			moveBy(0, scene()->height()-bottom);
+			setVelocity(getVelocityX(), -qAbs(getVelocityY()));
+		}
+
+		auto lObjects = collidingItems(Qt::IntersectsItemBoundingRect);
+		moveBy(-vx, -vy);
+
+		for each (auto pItem in lObjects)
+		{
+			for each (auto pShape in pItem->childItems())
+			{
+				addToGroup(pShape);
+			}
+		}
+	}
+	else
+	{
+		moveBy(vx, vy);
+		if (childItems().empty())
+		{
+			scene()->removeItem(this);
+			delete this;
+		}
+	}
+}
+
+void Object::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *)
+{
+	painter->setBrush(Qt::CrossPattern);
+	painter->drawRect(boundingRect());
+
+	/*QPen pen;
+	pen.setWidth(10);
+	pen.setColor(Qt::blue);
+
+	painter->setPen(pen);
+	painter->drawPoint(boundingRect().x(), boundingRect().y());*/
+}
+
+
+QPainterPath Object::shape() const
+{
+	QPainterPath path;
+	for each (auto pItem in childItems())
+	{
+		path = path + (pItem->mapToParent(pItem->shape()));
+	}
+	return path;
+}
+
+QList<QGraphicsItem *> Object::collidingItems(Qt::ItemSelectionMode mode /*= Qt::IntersectsItemShape*/)
+{
+	QList<QGraphicsItem *> objects;
+	for each (auto pItem in scene()->items()/*QGraphicsItem::collidingItems(mode)*/)
+	{
+		if (!pItem->childItems().empty())
+			if (collidesWithItem(pItem) && pItem != this)
+				objects.push_back(pItem);
+	}
+	return objects;
 }

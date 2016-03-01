@@ -14,7 +14,6 @@
 #include <QtWidgets/QAction>
 #include <QtWidgets/QApplication>
 #include <QtWidgets/QButtonGroup>
-#include <QtWidgets/QGraphicsView>
 #include <QtWidgets/QHBoxLayout>
 #include <QtWidgets/QHeaderView>
 #include <QtWidgets/QMainWindow>
@@ -23,6 +22,7 @@
 #include <QtWidgets/QStatusBar>
 #include <QtWidgets/QToolBar>
 #include <QtWidgets/QWidget>
+#include "Scene.h"
 
 QT_BEGIN_NAMESPACE
 
@@ -33,7 +33,8 @@ public:
     QAction *actionAddShape;
     QWidget *centralWidget;
     QHBoxLayout *horizontalLayout;
-    QGraphicsView *graphicsView;
+    Scene *scene;
+    QHBoxLayout *horizontalLayout_2;
     QMenuBar *menuBar;
     QMenu *menuScene;
     QToolBar *mainToolBar;
@@ -59,10 +60,14 @@ public:
         horizontalLayout->setSpacing(6);
         horizontalLayout->setContentsMargins(11, 11, 11, 11);
         horizontalLayout->setObjectName(QStringLiteral("horizontalLayout"));
-        graphicsView = new QGraphicsView(centralWidget);
-        graphicsView->setObjectName(QStringLiteral("graphicsView"));
+        scene = new Scene(centralWidget);
+        scene->setObjectName(QStringLiteral("scene"));
+        horizontalLayout_2 = new QHBoxLayout(scene);
+        horizontalLayout_2->setSpacing(6);
+        horizontalLayout_2->setContentsMargins(11, 11, 11, 11);
+        horizontalLayout_2->setObjectName(QStringLiteral("horizontalLayout_2"));
 
-        horizontalLayout->addWidget(graphicsView);
+        horizontalLayout->addWidget(scene);
 
         SSMainWindowClass->setCentralWidget(centralWidget);
         menuBar = new QMenuBar(SSMainWindowClass);

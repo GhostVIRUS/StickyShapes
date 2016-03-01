@@ -1,9 +1,10 @@
 #ifndef SSMAINWINDOW_H
 #define SSMAINWINDOW_H
 
-#include <QtWidgets/QMainWindow>
 #include "ui_SSMainWindow.h"
 #include "Scene.h"
+
+#include <QMainWindow>
 
 class SSMainWindow : public QMainWindow
 {
@@ -19,8 +20,6 @@ private slots:
 
 private:
 	Ui::SSMainWindowClass ui;
-
-	Scene *scene; //Do I really need a pointer on my Scene in this class?
 };
 
 #endif // SSMAINWINDOW_H
