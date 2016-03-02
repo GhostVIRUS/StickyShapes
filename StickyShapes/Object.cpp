@@ -2,8 +2,8 @@
 
 #include <QGraphicsScene>
 
-Object::Object(Shape *shape)
-	: vx(qrand() % 3 - 1), vy(qrand() % 3 - 1)
+Object::Object(QGraphicsItem *shape)
+	: vx(qrand() % 5 - 2), vy(qrand() % 5 - 2)
 {
 	addToGroup(shape);
 }
@@ -29,51 +29,37 @@ void Object::advance(int phase)
 		if (left <= 0)
 		{
 			moveBy(-left, 0);
-			setVelocity(qAbs(getVelocityX()), getVelocityY());
+			setVelocity(qAbs(getVX()), getVY());
 		}
 		else if (right >= scene()->width())
 		{
 			moveBy(scene()->width() - right, 0);
-			setVelocity(-qAbs(getVelocityX()), getVelocityY());
+			setVelocity(-qAbs(getVX()), getVY());
 		}
 		if (top <= 0)
 		{
 			moveBy(0, -top);
-			setVelocity(getVelocityX(), qAbs(getVelocityY()));
+			setVelocity(getVX(), qAbs(getVY()));
 		}
 		else if (bottom >= scene()->height())
 		{
 			moveBy(0, scene()->height()-bottom);
-			setVelocity(getVelocityX(), -qAbs(getVelocityY()));
-		}
-
-		auto lObjects = collidingItems(Qt::IntersectsItemBoundingRect);
-		moveBy(-vx, -vy);
-
-		for each (auto pItem in lObjects)
-		{
-			for each (auto pShape in pItem->childItems())
-			{
-				addToGroup(pShape);
-			}
+			setVelocity(getVX(), -qAbs(getVY()));
 		}
 	}
 	else
 	{
-		moveBy(vx, vy);
-		if (childItems().empty())
-		{
-			scene()->removeItem(this);
-			delete this;
-		}
+		moveBy(-vx, -vy);
 	}
 }
 
 void Object::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *)
 {
-	painter->setBrush(Qt::CrossPattern);
-	painter->drawRect(boundingRect());
+	//painter->setBrush(Qt::CrossPattern);
+	//painter->drawRect(boundingRect());
 
+	/*painter->setBrush(Qt::red);
+	painter->drawPath(shape());*/
 	/*QPen pen;
 	pen.setWidth(10);
 	pen.setColor(Qt::blue);
@@ -83,24 +69,20 @@ void Object::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget 
 }
 
 
+
 QPainterPath Object::shape() const
 {
-	QPainterPath path;
-	for each (auto pItem in childItems())
-	{
-		path = path + (pItem->mapToParent(pItem->shape()));
-	}
-	return path;
+	return shapePath;
 }
 
-QList<QGraphicsItem *> Object::collidingItems(Qt::ItemSelectionMode mode /*= Qt::IntersectsItemShape*/)
-{
-	QList<QGraphicsItem *> objects;
-	for each (auto pItem in scene()->items()/*QGraphicsItem::collidingItems(mode)*/)
-	{
-		if (!pItem->childItems().empty())
-			if (collidesWithItem(pItem) && pItem != this)
-				objects.push_back(pItem);
-	}
-	return objects;
+void Object::addToGroup(QGraphicsItem *shape)
+{	
+	shapePath = shapePath + mapFromItem(shape, shape->shape());
+	QGraphicsItemGroup::addToGroup(shape);
 }
+
+QRectF Object::boundingRect() const
+{
+	return shapePath.boundingRect();
+}
+
