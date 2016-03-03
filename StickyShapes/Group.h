@@ -1,18 +1,17 @@
-#ifndef OBJECT_H
-#define OBJECT_H
+#ifndef GROUP_H
+#define GROUP_H
 
 #include <QGraphicsItem>
-#include <QPainter>
 
 class Shape;
 
-class Object : public QGraphicsItemGroup
+class Group : public QGraphicsItemGroup
 {
 public:
-	Object(QGraphicsItem *shape);
-	~Object();
+	Group(QGraphicsItem *shape);
+	~Group();
 
-	inline void setVelocity(qreal x, qreal y) { vx = x; vy = y; };
+	inline void setVelocity(qreal x, qreal y);
 	inline qreal getVX() { return vx; };
 	inline qreal getVY() { return vy; };
 
@@ -21,11 +20,12 @@ public:
 	void addToGroup(QGraphicsItem *shape);
 
 	void advance(int phase);
-	void paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *);
 private:
 	qreal vx, vy; //velocity
 
 	QPainterPath shapePath;
+
+	const qreal maxSpeed = 3;
 };
 
-#endif // OBJECT_H
+#endif // GROUP_H

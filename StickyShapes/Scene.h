@@ -1,8 +1,7 @@
 #ifndef SCENE_H
 #define SCENE_H
 
-#include "Object.h"
-#include "Shape.h"
+#include "Group.h"
 
 #include <QWidget>
 #include <QGraphicsScene>
@@ -18,16 +17,14 @@ public:
 	Scene(QWidget *parent);
 	~Scene();
 
-	void addObject();
-	void addObject(Object* obj);
-	bool deleteObject(Object* obj);
+	void addGroup();
+	void addGroup(Group* group);
 	void clearScene();
-
-	//inline QList<Object *> &getObjects() { return objects; };
 
 private:
 	void resizeEvent(QResizeEvent *event);
 	void timerEvent(QTimerEvent *);
+	void mousePressEvent(QMouseEvent *event);
 
 private:
 	QGraphicsScene *field;
@@ -35,7 +32,7 @@ private:
 
 	QHBoxLayout *layout;
 
-	QLinkedList<Object *> objects; //objects with 0 parents 
+	QLinkedList<Group *> groups;
 };
 
 #endif // SCENE_H

@@ -10,8 +10,7 @@ class Shape : public QGraphicsItem
 {
 
 public:
-	//Shape() {  };
-	Shape(QPointF pos, QGraphicsItem *parent = 0);
+	Shape(QPointF pos, int shapeIndex = 1, QGraphicsItem *parent = 0);
 	~Shape();
 
 	QRectF boundingRect() const;

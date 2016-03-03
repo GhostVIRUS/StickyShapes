@@ -1,21 +1,21 @@
-#include "Object.h"
+#include "Group.h"
 
 #include <QGraphicsScene>
 
-Object::Object(QGraphicsItem *shape)
-	: vx(qrand() % 5 - 2), vy(qrand() % 5 - 2)
+Group::Group(QGraphicsItem *shape)
+	: vx(qrand() % 3 - 1), vy(qrand() % 3 - 1)
 {
 	addToGroup(shape);
 }
 
 
-Object::~Object()
+Group::~Group()
 {
-	//Qt has to delete children automatically
+	//Qt has to delete its children automatically
 }
 
 
-void Object::advance(int phase)
+void Group::advance(int phase)
 {
 	if (phase == 0)
 	{
@@ -53,36 +53,35 @@ void Object::advance(int phase)
 	}
 }
 
-void Object::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *)
-{
-	//painter->setBrush(Qt::CrossPattern);
-	//painter->drawRect(boundingRect());
-
-	/*painter->setBrush(Qt::red);
-	painter->drawPath(shape());*/
-	/*QPen pen;
-	pen.setWidth(10);
-	pen.setColor(Qt::blue);
-
-	painter->setPen(pen);
-	painter->drawPoint(boundingRect().x(), boundingRect().y());*/
-}
-
-
-
-QPainterPath Object::shape() const
+QPainterPath Group::shape() const
 {
 	return shapePath;
 }
 
-void Object::addToGroup(QGraphicsItem *shape)
+void Group::addToGroup(QGraphicsItem *shape)
 {	
 	shapePath = shapePath + mapFromItem(shape, shape->shape());
 	QGraphicsItemGroup::addToGroup(shape);
 }
 
-QRectF Object::boundingRect() const
+QRectF Group::boundingRect() const
 {
 	return shapePath.boundingRect();
+}
+
+void Group::setVelocity(qreal x, qreal y)
+{
+	if (x > maxSpeed)
+		vx = maxSpeed;
+	else if (x < -maxSpeed)
+		vx = -maxSpeed;
+	else
+		vx = x;
+	if (y > maxSpeed)
+		vy = maxSpeed;
+	else if (y < -maxSpeed)
+		vy = -maxSpeed;
+	else
+		vy = y;
 }
 

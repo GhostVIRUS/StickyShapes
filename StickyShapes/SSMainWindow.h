@@ -2,7 +2,6 @@
 #define SSMAINWINDOW_H
 
 #include "ui_SSMainWindow.h"
-#include "Scene.h"
 
 #include <QMainWindow>
 

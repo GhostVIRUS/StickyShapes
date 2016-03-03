@@ -1,5 +1,4 @@
 #include "SSMainWindow.h"
-#include "Shape.h"
 
 SSMainWindow::SSMainWindow(QWidget *parent)
 	: QMainWindow(parent)
@@ -15,10 +14,10 @@ SSMainWindow::~SSMainWindow()
 void SSMainWindow::slotClearScene()
 {
 	ui.scene->clearScene();
-	//ui.scene->timeStep();
 }
 
 void SSMainWindow::slotAddShape()
 {
-	ui.scene->addObject();
+	for (int i = 0; i < 10; ++i)
+		ui.scene->addGroup();
 }

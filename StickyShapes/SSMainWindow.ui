@@ -53,20 +53,11 @@
     <property name="title">
      <string>Scene</string>
     </property>
+    <addaction name="actionAddShapes"/>
     <addaction name="actionClearScene"/>
-    <addaction name="actionAddShape"/>
    </widget>
    <addaction name="menuScene"/>
   </widget>
-  <widget class="QToolBar" name="mainToolBar">
-   <attribute name="toolBarArea">
-    <enum>TopToolBarArea</enum>
-   </attribute>
-   <attribute name="toolBarBreak">
-    <bool>false</bool>
-   </attribute>
-  </widget>
-  <widget class="QStatusBar" name="statusBar"/>
   <action name="actionClearScene">
    <property name="text">
     <string>Clear Scene</string>
@@ -75,9 +66,9 @@
     <string>Ctrl+C</string>
    </property>
   </action>
-  <action name="actionAddShape">
+  <action name="actionAddShapes">
    <property name="text">
-    <string>Add Shape</string>
+    <string>Add Shapes</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+A</string>
@@ -98,7 +89,7 @@
  </resources>
  <connections>
   <connection>
-   <sender>actionAddShape</sender>
+   <sender>actionAddShapes</sender>
    <signal>triggered()</signal>
    <receiver>SSMainWindowClass</receiver>
    <slot>slotAddShape()</slot>

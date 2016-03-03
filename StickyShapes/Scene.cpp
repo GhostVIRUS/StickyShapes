@@ -1,6 +1,8 @@
 #include "Scene.h"
+#include "Shape.h"
 
 #include <QGLWidget>
+#include <QMouseEvent>
 
 Scene::Scene(QWidget *parent)
 	: QWidget(parent), field(new QGraphicsScene(0, 0, 300, 300)), view(new QGraphicsView(field, this)),
@@ -16,6 +18,7 @@ Scene::Scene(QWidget *parent)
 	view->setViewport(new QGLWidget(QGLFormat(QGL::SampleBuffers | QGL::DirectRendering)));
 	view->setViewportUpdateMode(QGraphicsView::BoundingRectViewportUpdate/*QGraphicsView::SmartViewportUpdate*/);
 	view->setAlignment(Qt::AlignTop | Qt::AlignLeft);
+	view->setRenderHints(QPainter::Antialiasing);
 
 	startTimer(33);
 }
@@ -23,51 +26,41 @@ Scene::Scene(QWidget *parent)
 Scene::~Scene()
 {
 	delete view;
-	delete field;
+	delete field; //Qt deletes Objects automatically during this
+	delete layout;
 }
 
-void Scene::addObject()
+void Scene::addGroup()
 {
-	Object *obj = new Object(new Shape(QPointF(qrand() % (width() - 54), qrand() % (height() - 54))));
-	addObject(obj);
+	Group *group = new Group(new Shape(QPointF(qrand() % (width() - 54), qrand() % (height() - 54))));
+	addGroup(group);
 }
 
-void Scene::addObject(Object* obj)
+void Scene::addGroup(Group* group)
 {
-	field->addItem(obj);
-	objects.push_back(obj);
+	field->addItem(group);
+	groups.push_back(group);
 }
-
-bool Scene::deleteObject(Object* obj)
-{
-	if (!obj)
-		return false;
-	field->removeItem(obj);
-
-	return true;
-}
-
 
 void Scene::timerEvent(QTimerEvent *)
 {
-	for (auto iObject = objects.begin(); iObject != objects.end(); ++iObject)
+	for (auto iGroup = groups.begin(); iGroup != groups.end(); ++iGroup)
 	{
-		(*iObject)->advance(0);
-		for (auto jObject = iObject+1; jObject != objects.end(); ++jObject)
+		(*iGroup)->advance(0);
+		for (auto jGroup = iGroup+1; jGroup != groups.end(); ++jGroup)
 		{
-			if ((*iObject)->collidesWithItem((*jObject)))
+			if ((*iGroup)->collidesWithItem((*jGroup)))
 			{
-				//(*iObject)->moveBy(-(*iObject)->getVelocityX(), -(*iObject)->getVelocityX());
-				(*iObject)->advance(1);
-				for each (auto pShape in (*iObject)->childItems())
+				(*iGroup)->advance(1);
+				for each (auto pShape in (*iGroup)->childItems())
 				{
-					(*jObject)->addToGroup(pShape);
+					(*jGroup)->addToGroup(pShape);
 				}
-				(*jObject)->setVelocity((*jObject)->getVX() + (*iObject)->getVX(), (*jObject)->getVY() + (*iObject)->getVY());
-				field->removeItem((*iObject));
-				delete (*iObject);
-				iObject = objects.erase(iObject);
-				--iObject;
+				(*jGroup)->setVelocity((*jGroup)->getVX() + (*iGroup)->getVX(), (*jGroup)->getVY() + (*iGroup)->getVY());
+				field->removeItem((*iGroup));
+				delete (*iGroup);
+				iGroup = groups.erase(iGroup);
+				--iGroup;
 				break;
 			}
 		}
@@ -85,4 +78,14 @@ void Scene::resizeEvent(QResizeEvent *event)
 void Scene::clearScene()
 {
 	field->clear();
+	groups.clear();
+}
+
+void Scene::mousePressEvent(QMouseEvent *event)
+{
+	if (event->button() == Qt::LeftButton)
+	{
+		Group *group = new Group(new Shape(event->pos()));
+		addGroup(group);
+	}
 }

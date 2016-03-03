@@ -19,8 +19,6 @@
 #include <QtWidgets/QMainWindow>
 #include <QtWidgets/QMenu>
 #include <QtWidgets/QMenuBar>
-#include <QtWidgets/QStatusBar>
-#include <QtWidgets/QToolBar>
 #include <QtWidgets/QWidget>
 #include "Scene.h"
 
@@ -30,15 +28,13 @@ class Ui_SSMainWindowClass
 {
 public:
     QAction *actionClearScene;
-    QAction *actionAddShape;
+    QAction *actionAddShapes;
     QWidget *centralWidget;
     QHBoxLayout *horizontalLayout;
     Scene *scene;
     QHBoxLayout *horizontalLayout_2;
     QMenuBar *menuBar;
     QMenu *menuScene;
-    QToolBar *mainToolBar;
-    QStatusBar *statusBar;
 
     void setupUi(QMainWindow *SSMainWindowClass)
     {
@@ -52,8 +48,8 @@ public:
         SSMainWindowClass->setDockNestingEnabled(false);
         actionClearScene = new QAction(SSMainWindowClass);
         actionClearScene->setObjectName(QStringLiteral("actionClearScene"));
-        actionAddShape = new QAction(SSMainWindowClass);
-        actionAddShape->setObjectName(QStringLiteral("actionAddShape"));
+        actionAddShapes = new QAction(SSMainWindowClass);
+        actionAddShapes->setObjectName(QStringLiteral("actionAddShapes"));
         centralWidget = new QWidget(SSMainWindowClass);
         centralWidget->setObjectName(QStringLiteral("centralWidget"));
         horizontalLayout = new QHBoxLayout(centralWidget);
@@ -76,19 +72,13 @@ public:
         menuScene = new QMenu(menuBar);
         menuScene->setObjectName(QStringLiteral("menuScene"));
         SSMainWindowClass->setMenuBar(menuBar);
-        mainToolBar = new QToolBar(SSMainWindowClass);
-        mainToolBar->setObjectName(QStringLiteral("mainToolBar"));
-        SSMainWindowClass->addToolBar(Qt::TopToolBarArea, mainToolBar);
-        statusBar = new QStatusBar(SSMainWindowClass);
-        statusBar->setObjectName(QStringLiteral("statusBar"));
-        SSMainWindowClass->setStatusBar(statusBar);
 
         menuBar->addAction(menuScene->menuAction());
+        menuScene->addAction(actionAddShapes);
         menuScene->addAction(actionClearScene);
-        menuScene->addAction(actionAddShape);
 
         retranslateUi(SSMainWindowClass);
-        QObject::connect(actionAddShape, SIGNAL(triggered()), SSMainWindowClass, SLOT(slotAddShape()));
+        QObject::connect(actionAddShapes, SIGNAL(triggered()), SSMainWindowClass, SLOT(slotAddShape()));
         QObject::connect(actionClearScene, SIGNAL(triggered()), SSMainWindowClass, SLOT(slotClearScene()));
 
         QMetaObject::connectSlotsByName(SSMainWindowClass);
@@ -99,8 +89,8 @@ public:
         SSMainWindowClass->setWindowTitle(QApplication::translate("SSMainWindowClass", "Sticky Shapes", 0));
         actionClearScene->setText(QApplication::translate("SSMainWindowClass", "Clear Scene", 0));
         actionClearScene->setShortcut(QApplication::translate("SSMainWindowClass", "Ctrl+C", 0));
-        actionAddShape->setText(QApplication::translate("SSMainWindowClass", "Add Shape", 0));
-        actionAddShape->setShortcut(QApplication::translate("SSMainWindowClass", "Ctrl+A", 0));
+        actionAddShapes->setText(QApplication::translate("SSMainWindowClass", "Add Shapes", 0));
+        actionAddShapes->setShortcut(QApplication::translate("SSMainWindowClass", "Ctrl+A", 0));
         menuScene->setTitle(QApplication::translate("SSMainWindowClass", "Scene", 0));
     } // retranslateUi
 
