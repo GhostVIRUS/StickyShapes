@@ -30,13 +30,13 @@ Scene::~Scene()
 	delete layout;
 }
 
-void Scene::addGroup()
+void Scene::addToScene()
 {
 	Group *group = new Group(new Shape(QPointF(qrand() % (width() - 54), qrand() % (height() - 54))));
-	addGroup(group);
+	addToScene(group);
 }
 
-void Scene::addGroup(Group* group)
+void Scene::addToScene(Group* group)
 {
 	field->addItem(group);
 	groups.push_back(group);
@@ -86,6 +86,6 @@ void Scene::mousePressEvent(QMouseEvent *event)
 	if (event->button() == Qt::LeftButton)
 	{
 		Group *group = new Group(new Shape(event->pos()));
-		addGroup(group);
+		addToScene(group);
 	}
 }

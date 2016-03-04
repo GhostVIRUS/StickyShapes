@@ -19,5 +19,5 @@ void SSMainWindow::slotClearScene()
 void SSMainWindow::slotAddShape()
 {
 	for (int i = 0; i < 10; ++i)
-		ui.scene->addGroup();
+		ui.scene->addToScene();
 }

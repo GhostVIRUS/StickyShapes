@@ -8,10 +8,9 @@ Shape::Shape(QPointF pos, int shapeIndex /*= 1*/, QGraphicsItem *parent /*= 0*/)
 	setRotation(qrand()%90);
 	setPos(pos);
 
-	//brush.setColor(color);
 	int shapeRand = qrand() % 6;
-	int w = 10 + qrand() % 20; //w = w / 2;
-	int h = 10 + qrand() % 20; //h = h / 2;
+	int w = 10 + qrand() % 20;
+	int h = 10 + qrand() % 20;
 	QPolygon polygon;
 	switch (shapeRand)
 	{
@@ -31,7 +30,8 @@ Shape::Shape(QPointF pos, int shapeIndex /*= 1*/, QGraphicsItem *parent /*= 0*/)
 			<< QPoint(w * 4 / 5, w)
 			<< QPoint(w / 6, w * 5 / 4)
 			<< QPoint(w * 3 / 4, w * 3 / 4)
-			<< QPoint(w * 3 / 4, w / 4);
+			<< QPoint(w * 3 / 4, w / 4)
+			<< QPoint(0, 0);
 		shapePath.addPolygon(polygon);
 		break;
 	case 4:
@@ -41,7 +41,8 @@ Shape::Shape(QPointF pos, int shapeIndex /*= 1*/, QGraphicsItem *parent /*= 0*/)
 			<< QPoint(-w, -w * 173 / 100)
 			<< QPoint(-2 * w, 0)
 			<< QPoint(-w, w * 173 / 100)
-			<< QPoint(w, w * 173 / 100);
+			<< QPoint(w, w * 173 / 100)
+			<< QPoint(2 * w, 0);
 		shapePath.addPolygon(polygon);
 		break;
 	case 5:
@@ -56,7 +57,8 @@ Shape::Shape(QPointF pos, int shapeIndex /*= 1*/, QGraphicsItem *parent /*= 0*/)
 			<< QPoint(w / 4, w * 3 / 2)
 			<< QPoint(0, w)
 			<< QPoint(-w / 4, w / 2)
-			<< QPoint(-w / 2, 0);
+			<< QPoint(-w / 2, 0)
+			<< QPoint(0, 0);
 		shapePath.moveTo(polygon[0]);
 		for (int i = 1; i < polygon.size(); i += 3)
 			shapePath.cubicTo(polygon[i], polygon[(i + 1) % polygon.size()], polygon[(i + 2) % polygon.size()]);
@@ -82,7 +84,9 @@ QPainterPath Shape::shape() const
 
 void Shape::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *)
 {
-	//painter->setPen(Qt::NoPen);
+	QPen pen;
+	pen.setWidthF(1.5);
+	painter->setPen(pen);
 	painter->setBrush(color);
 	painter->drawPath(shapePath);
 }

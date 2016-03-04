@@ -17,8 +17,8 @@ public:
 	Scene(QWidget *parent);
 	~Scene();
 
-	void addGroup();
-	void addGroup(Group* group);
+	void addToScene();
+	void addToScene(Group* group);
 	void clearScene();
 
 private:
